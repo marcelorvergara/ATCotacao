@@ -1,0 +1,6 @@
+edu/infnet/cotacao/repository/CotacaoRepository.class
+edu/infnet/cotacao/model/Cotacao.class
+edu/infnet/cotacao/service/CotacaoService.class
+edu/infnet/cotacao/BasicApplication.class
+edu/infnet/cotacao/web/CotacaoController.class
+edu/infnet/cotacao/service/CotacaoServiceImpl.class

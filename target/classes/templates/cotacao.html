@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Cotação</title>
+        <meta charset="UTF-8"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <div class="container mt-4">
+            <h4>Cadastro de Cotação de Produto</h4>
+            <hr>
+            <div class="container mt-4" style="width: 390px">
+                <form method="POST" class="form-signin" th:object="${cotacaoForm}" th:action="@{/cadCotacao}">  
+                    <div class="row">
+                        <div class="col">
+                            <label for="produto">Escolha um produto:</label>
+                            <select autofocus="true"  class="form-select" th:field="*{produto}" id="roles" name="produto" onchange="getval(this);">
+                                <option value="0" selected>Lista Produtos</option>
+                                <option th:each="produto : ${prodLst}" th:value="${produto.codigoProd}" th:text="${produto.nome}"></option>
+                            </select>  
+                        </div>
+                        <div class="col" >
+                            <img class="img-fluid img-thumbnail" alt="imagem do prodto" src="http://www.arqblog.com.br/wp-content/uploads/2016/05/conheca-5-diferencas-entre-produto-e-servico.jpg" id="prod-img" >
+                        </div>
+                    </div>
+   
+                   
+                    <div class="form-group mt-4">
+                        <lable for="fornecedor">Nome do fornecedor: </lable>
+                        <input type="text" th:field="*{fornecedor}" class="form-control" placeholder="Fornecedor" name="fornecedor"
+                           autofocus="true" id="fornecedor">
+                    </div>                
+                    <div class="form-group mt-4">
+                        <lable for="dataCotacao">Data da cotação: </lable>
+                        <input type="date" th:field="*{dataCotacao}" class="form-control" placeholder="Data" name="dataCotacao"
+                           autofocus="true" id="dataCotacao">
+                    </div>  
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group mt-4">
+                                <lable for="validadeCotacao">Validade: </lable>
+                                <input type="number" th:field="*{validadeCotacao}" class="form-control" name="validadeCotacao"
+                                   autofocus="true" id="validadeCotacao">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group mt-4">
+                                <lable for="valor">Valor </lable>
+                                <input type="number" th:field="*{valor}" class="form-control" name="valor" min="0,00" max="9999999,99" step="0,01"
+                                   autofocus="true" id="valor">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 d-grid gap-2">
+                        <button type="submit" name="action" value="upload" class="btn btn-primary">Enviar</button>
+                    </div>    
+                    
+                </form>
+            </div>      
+        </div>
+
+        <script th:inline="javascript">
+            var jsonProdList = /*[[${prodLst}]]*/ {};
+            console.table(jsonProdList)
+            function getval(sel){
+               let idx = sel.value;
+               for(let prd of jsonProdList){
+                   if (idx === prd.codigoProd) {
+                       document.getElementById("prod-img").src = prd.imagem
+                   }
+               }
+            }
+        </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    </body>
+</html>
+
