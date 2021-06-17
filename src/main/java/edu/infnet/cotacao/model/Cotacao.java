@@ -35,6 +35,14 @@ public class Cotacao {
     public Cotacao() {
     }
 
+    public Cotacao(String produto, String fornecedor, LocalDate dataCotacao, int validadeCotacao, BigDecimal valor) {
+        this.produto = produto;
+        this.fornecedor = fornecedor;
+        this.dataCotacao = dataCotacao;
+        this.validadeCotacao = validadeCotacao;
+        this.valor = valor;
+    }
+
     /**
      * @return the idCotacao
      */

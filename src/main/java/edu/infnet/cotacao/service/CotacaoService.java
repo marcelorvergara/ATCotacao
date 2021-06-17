@@ -5,6 +5,8 @@
  */
 package edu.infnet.cotacao.service;
 
+import edu.infnet.cotacao.model.Cotacao;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,5 +15,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface CotacaoService {
+
+    public void save(Cotacao cotacao);
+
+    public List<Cotacao> findByProduto(String produto);
 
 }

@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="mt-5 d-grid gap-2">
-                        <button type="submit" name="action" value="upload" class="btn btn-primary">Enviar</button>
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
                     </div>    
                     
                 </form>
@@ -62,7 +62,7 @@
 
         <script th:inline="javascript">
             var jsonProdList = /*[[${prodLst}]]*/ {};
-            console.table(jsonProdList)
+         
             function getval(sel){
                let idx = sel.value;
                for(let prd of jsonProdList){

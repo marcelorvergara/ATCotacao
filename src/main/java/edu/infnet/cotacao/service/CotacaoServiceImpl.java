@@ -5,16 +5,32 @@
  */
 package edu.infnet.cotacao.service;
 
+import edu.infnet.cotacao.model.Cotacao;
 import edu.infnet.cotacao.repository.CotacaoRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Marcelo Vergara <http://marcelo-vergara.codes/>
  */
+@Service
 public class CotacaoServiceImpl implements CotacaoService {
 
     @Autowired
     CotacaoRepository cotacaoRepository;
+
+    @Override
+    public void save(Cotacao cotacao) {
+        cotacaoRepository.save(cotacao);
+    }
+
+    @Override
+    public List<Cotacao> findByProduto(String produto) {
+        List<Cotacao> cotacoes;
+        cotacoes = cotacaoRepository.findByProduto(produto);
+        return cotacoes;
+    }
 
 }

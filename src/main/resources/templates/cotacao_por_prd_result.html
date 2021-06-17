@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Busca Cotação</title>
+        <meta charset="UTF-8"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <div class="container mt-4">
+            <h4>Resultado de Cotações por Produto</h4>
+            <hr>
+            <div class="container mt-4" style="width: 590px;">
+                <form method="GET" class="form-signin" th:action="@{/getCsv}"  th:object="${cotacaoForm}">
+                    <div th:if="${cotacaoList}">
+                        <p>Lista de Cotação: <strong><span th:text="${produto}"></span></strong></p>
+                        <p>Quantidade de Cotações: <span th:text="${cotacaoList.size}"></span>
+                    </div>
+
+                    <table data-toggle="table" data-sort-name="nome" data-sort-order="desc"
+                       id="table-index" class="table table-striped table-sm" 
+                       cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th scope="col">Fornecedor</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Validade</th>
+                            <th scope="col">Valor</th>
+                            <th colspan="2" scope="col">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody th:if="${cotacaoList.size} > 0">
+                        <tr scope="row" th:each="cotacao : ${cotacaoList}">
+                            <td th:text="${cotacao.fornecedor} "/>
+                            <td th:text="${cotacao.dataCotacao} "/>
+                            <td th:text="${cotacao.validadeCotacao} "/>
+                            <td th:text="${cotacao.valor} "/>
+                            <td><a th:href="@{'/editar/' + ${cotacao.idCotacao}}"> Alterar</a></td>
+                            <td><a th:href="@{'/deletar/' + ${cotacao.idCotacao}}"> Excluir</a></td>
+                        </tr>
+                    </tbody>
+                    <tbody th:if="${cotacaoList.size} == 0">
+                        <tr>
+                            <td colspan="3">Não há cotações para o produto.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="mt-5 d-grid gap-2">
+                    <a th:href="@{'/getCsv/' + ${cotacaoList[0].produto}}">
+                    <span class="btn btn-primary">Exportar Cotação</span>
+                    </a>
+                </div>  
+            </form>    
+            </div>
+        </div>   
+    </body>
+</html>

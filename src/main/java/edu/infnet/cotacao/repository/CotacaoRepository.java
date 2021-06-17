@@ -6,6 +6,7 @@
 package edu.infnet.cotacao.repository;
 
 import edu.infnet.cotacao.model.Cotacao;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -13,5 +14,7 @@ import org.springframework.data.repository.CrudRepository;
  * @author Marcelo Vergara <http://marcelo-vergara.codes/>
  */
 public interface CotacaoRepository extends CrudRepository<Cotacao, Long> {
+
+    public List<Cotacao> findByProduto(String produto);
 
 }

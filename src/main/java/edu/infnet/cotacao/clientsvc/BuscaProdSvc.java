@@ -9,6 +9,7 @@ import edu.infnet.cotacao.model.Produto;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  *
@@ -19,5 +20,8 @@ public interface BuscaProdSvc {
 
     @GetMapping("/produtoList")
     List<Produto> buscaProdSvc();
+
+    @GetMapping("/nomeProd/{id}")
+    String buscaNomeProd(@PathVariable("id") String id);
 
 }
