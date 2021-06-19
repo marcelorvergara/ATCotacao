@@ -11,7 +11,7 @@
             <h4>Busca de Cotação por Produto</h4>
             <hr>
             <div class="container mt-4" style="width: 390px;">
-                <form method="POST" class="form-signin" th:object="${cotacaoForm}" th:action="@{/listaCotacoes}">  
+                <form method="GET" class="form-signin" th:object="${cotacaoForm}">  
                     <div class="row">
                         <div class="col">
                             <label for="produto">Escolha um produto:</label>
@@ -26,7 +26,9 @@
                         </div>
                     </div>
                     <div class="mt-5 d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">Busca Cotação</button>
+                        <a id="link">
+                            <span type="submit" class="btn btn-primary">Busca Cotação</span>
+                        </a>
                     </div>    
                 </form>
             </div>
@@ -40,6 +42,7 @@
                    if (idx === prd.codigoProd) {
                        document.getElementById("prod-img").src = prd.imagem
                        document.getElementById("prodId").text = prd.codigoProd
+                       document.getElementById("link").href = '/listaCotacoes/' + prd.codigoProd 
                    }
                }
             }

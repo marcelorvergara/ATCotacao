@@ -17,4 +17,6 @@ public interface CotacaoRepository extends CrudRepository<Cotacao, Long> {
 
     public List<Cotacao> findByProduto(String produto);
 
+    public Cotacao findByIdCotacao(long parseLong);
+
 }

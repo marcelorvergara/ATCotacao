@@ -33,4 +33,19 @@ public class CotacaoServiceImpl implements CotacaoService {
         return cotacoes;
     }
 
+    @Override
+    public Cotacao findByIdCotacao(String id) {
+        return cotacaoRepository.findByIdCotacao(Long.parseLong(id));
+    }
+
+    @Override
+    public Cotacao findById(Long idCotacao) {
+        return cotacaoRepository.findByIdCotacao(idCotacao);
+    }
+
+    @Override
+    public void deleteByIdCotacao(Long idCotacao) {
+        cotacaoRepository.deleteById(idCotacao);
+    }
+
 }

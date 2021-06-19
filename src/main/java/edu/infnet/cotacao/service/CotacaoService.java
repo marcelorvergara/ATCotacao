@@ -20,4 +20,10 @@ public interface CotacaoService {
 
     public List<Cotacao> findByProduto(String produto);
 
+    public Cotacao findByIdCotacao(String id);
+
+    public Cotacao findById(Long idCotacao);
+
+    public void deleteByIdCotacao(Long idCotacao);
+
 }

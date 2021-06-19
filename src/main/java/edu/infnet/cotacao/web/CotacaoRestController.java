@@ -10,11 +10,17 @@ import edu.infnet.cotacao.model.Cotacao;
 import edu.infnet.cotacao.service.CotacaoService;
 import edu.infnet.cotacao.service.CsvExport;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,4 +50,23 @@ public class CotacaoRestController {
 
         CsvExport.exportCotacoes(response.getWriter(), cotacaoList);
     }
+
+    @DeleteMapping("/api/delete/{idCotacao}")
+    public Map<String, Boolean> deletarCotacao(@PathVariable("idCotacao") String idCotacao, Model model) {
+
+        System.out.println("id cotação: " + idCotacao);
+
+        //buscar a cotação pelo Id dela
+        Cotacao cotacao = cotacaoService.findById(Long.parseLong(idCotacao));
+
+        //excluir cotação
+        cotacaoService.deleteByIdCotacao(Long.parseLong(idCotacao));
+
+        Map<String, Boolean> response = new HashMap<>();
+
+        response.put("Deletado com sucesso!", Boolean.TRUE);
+
+        return response;
+    }
+
 }
