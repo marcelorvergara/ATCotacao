@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.PathVariable;
  *
  * @author Marcelo Vergara <http://marcelo-vergara.codes/>
  */
+//para buscar os produtos em no microsserviço de produtos
 @FeignClient(url = "http://localhost:8081/", name = "BuscaProdSvc")
 public interface BuscaProdSvc {
 
+    //lista todos os produtos cadastrados
     @GetMapping("/produtoList")
     List<Produto> buscaProdSvc();
 
+    //busca o nome de um produto específico
     @GetMapping("/nomeProd/{id}")
     String buscaNomeProd(@PathVariable("id") String id);
 

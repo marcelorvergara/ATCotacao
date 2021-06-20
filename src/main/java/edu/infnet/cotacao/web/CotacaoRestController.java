@@ -48,6 +48,7 @@ public class CotacaoRestController {
         //buscar o nome do produto pelo seu id
         String nomePrd = buscaProdSvc.buscaNomeProd(prodId);
 
+        //para abrir diretamente um arquivo no browser
         response.setHeader("Content-Type", "application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment; filename=cotacoes.csv");
 

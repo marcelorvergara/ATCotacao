@@ -41,6 +41,7 @@ public class CotacaoController {
     @Autowired
     public CotacaoService cotacaoService;
 
+    //entrada para cadastro de cotações
     @GetMapping({"/cotacao", "/cotacao.html"})
     public String cotacao(Model model) {
 
@@ -57,6 +58,7 @@ public class CotacaoController {
         return "cotacao";
     }
 
+    //gravação de uma nova cotação
     @PostMapping("/cadCotacao")
     public String gravaCot(@RequestParam("produto") String produto,
             @RequestParam("fornecedor") String fornecedor,
@@ -64,17 +66,20 @@ public class CotacaoController {
             @RequestParam("validadeCotacao") String validadeCotacao,
             @RequestParam("valor") String valor) {
 
+        //convertendo a string de data que vem do html para LocalDate
         DateTimeFormatter DATEFORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate lDate = LocalDate.parse(dataCotacao, DATEFORMATTER);
 
+        //criação do objecto cotação que será gravado no banco de dados
         Cotacao cotacao = new Cotacao(produto, fornecedor, lDate, Integer.parseInt(validadeCotacao), new BigDecimal(valor.toString()));
 
+        //gravação em si
         cotacaoService.save(cotacao);
 
         return "redirect:/cotacao";
     }
 
-    //página que retornará a lista de produtos para posteriormente buscar as cotações
+    //página de busca de cotação. Lista os produtos para escolher as cotações associadas
     @GetMapping("/buscaCotacao")
     public String buscaCotacao(Model model) {
 
@@ -83,7 +88,7 @@ public class CotacaoController {
         //carregar lista de produtos
         model.addAttribute("cotacaoForm", cotacaoForm);
 
-        //pegar a lista de produtos
+        //pegar a lista de produtos. Consumo do microsserviço de produtos
         List<Produto> prodLst = buscaProdSvc.buscaProdSvc();
 
         model.addAttribute("prodLst", prodLst);
@@ -95,38 +100,42 @@ public class CotacaoController {
     @GetMapping("/listaCotacoes/{produto}")
     public String listaCotacoes(@PathVariable("produto") String produto, Model model) {
 
-        //buscando as cotações
+        //buscando as cotações no banco de dados
         List<Cotacao> cotacaoList = cotacaoService.findByProduto(produto);
 
+        //se vazio volta a página de busca de cotações
         if (cotacaoList.isEmpty()) {
             return "redirect:/buscaCotacao";
         }
 
-        //buscar o nome do produto pelo seu id
+        //buscar o nome do produto pelo seu id. Consumo do microsserviço de produtos
         String nomePrd = buscaProdSvc.buscaNomeProd(produto);
 
-        //carregar a lista de cotações do produto
+        //carregar a lista de cotações do produto e o nome do produto
         model.addAttribute("cotacaoList", cotacaoList);
         model.addAttribute("produto", nomePrd);
 
         return "cotacao_por_prd_result";
     }
 
+    //quando se clica no link "alterar" de um produto na tabela de cotações
     @GetMapping("/editar/{id}")
     public String alterarCotacao(@PathVariable("id") String id, Model model) {
 
-        //buscar os dados da cotação para alterar
+        //buscar os dados da cotação para apresentar na página
         Cotacao cotacao = cotacaoService.findByIdCotacao(id);
 
         //buscar o nome do produto pelo seu id
         String nomePrd = buscaProdSvc.buscaNomeProd(cotacao.getProduto());
 
+        //enviando a cotação e o nome do produto relacionado
         model.addAttribute("cotacaoForm", cotacao);
         model.addAttribute("nomeProduto", nomePrd);
 
         return "alterar_cotacao";
     }
 
+    //gravação da alteração da cotação no banco de dados
     @PostMapping("/gravaAlteracao")
     public String gravarAlteracao(@RequestParam("idCotacao") String idCotacao,
             @RequestParam("produto") String produto,
@@ -135,16 +144,20 @@ public class CotacaoController {
             @RequestParam("validadeCotacao") String validadeCotacao,
             @RequestParam("valor") String valor) {
 
+        //convertendo a string de data que vem do html para LocalDate do Java
         int dia = Integer.parseInt(dataCotacao.split("/")[2]);
         int mes = Integer.parseInt(dataCotacao.split("/")[1]);
         int ano = Integer.parseInt(dataCotacao.split("/")[0]);
 
         LocalDate validCot = LocalDate.of(dia, mes, ano);
 
+        //Juntar as informações que vieram do html em um novo objeto
         Cotacao cotacao = new Cotacao(Long.parseLong(idCotacao), produto, fornecedor, validCot, Integer.parseInt(validadeCotacao), new BigDecimal(valor));
 
+        //Pega novamente o objeto a ser alterado
         Cotacao newCotacao = cotacaoService.findByIdCotacao(idCotacao);
 
+        //valida se realmente há um objeto cotação correspondente ao que veio da interface
         if (newCotacao != null) {
             newCotacao.setProduto(cotacao.getProduto());
             newCotacao.setFornecedor(cotacao.getFornecedor());
@@ -167,12 +180,11 @@ public class CotacaoController {
         return "redirect:/listaCotacoes/" + produto;
     }
 
+    //deletar uma cotação pelo seu id
     @GetMapping("/deletar/{idCotacao}")
     public String deletarCotacao(@PathVariable("idCotacao") String idCotacao, Model model) {
 
-        System.out.println("id cotação: " + idCotacao);
-
-        //buscar a cotação pelo Id dela
+        //buscar a cotação pelo Id dela para retornar para a mesma página de exibir cotação
         Cotacao cotacao = cotacaoService.findByIdCotacao(idCotacao);
 
         //excluir cotação
