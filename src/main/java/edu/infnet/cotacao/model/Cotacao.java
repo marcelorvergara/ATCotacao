@@ -5,6 +5,8 @@
  */
 package edu.infnet.cotacao.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -20,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "cotacao")
-public class Cotacao {
+public class Cotacao implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,6 +30,7 @@ public class Cotacao {
     private Long idCotacao;
     private String produto;
     private String fornecedor;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataCotacao;
     private int validadeCotacao;
     private BigDecimal valor;

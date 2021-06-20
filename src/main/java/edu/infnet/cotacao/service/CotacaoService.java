@@ -7,6 +7,7 @@ package edu.infnet.cotacao.service;
 
 import edu.infnet.cotacao.model.Cotacao;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,8 +23,8 @@ public interface CotacaoService {
 
     public Cotacao findByIdCotacao(String id);
 
-    public Cotacao findById(Long idCotacao);
-
     public void deleteByIdCotacao(Long idCotacao);
+
+    public Optional<Cotacao> findById(Long id);
 
 }

@@ -19,9 +19,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -39,6 +38,7 @@ public class CotacaoRestController {
     @Autowired
     public CotacaoService cotacaoService;
 
+    //exportação CSV
     @GetMapping(value = "/getCsv/{prodId}", produces = "text/csv")
     public void getCotacoes(@PathVariable String prodId, HttpServletResponse response) throws IOException {
 
@@ -48,25 +48,61 @@ public class CotacaoRestController {
         //buscar o nome do produto pelo seu id
         String nomePrd = buscaProdSvc.buscaNomeProd(prodId);
 
+        response.setHeader("Content-Type", "application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment; filename=cotacoes.csv");
+
         CsvExport.exportCotacoes(response.getWriter(), cotacaoList);
     }
 
+    //Api para uso do Http DELETE
     @DeleteMapping("/api/delete/{idCotacao}")
     public Map<String, Boolean> deletarCotacao(@PathVariable("idCotacao") String idCotacao, Model model) {
 
-        System.out.println("id cotação: " + idCotacao);
+        //declaração para retorno REST
+        Map<String, Boolean> response = new HashMap<>();
 
         //buscar a cotação pelo Id dela
-        Cotacao cotacao = cotacaoService.findById(Long.parseLong(idCotacao));
+        Cotacao cotacao = cotacaoService.findByIdCotacao(idCotacao);
+
+        //teste para previnir erro HTTP 500
+        if (cotacao == null) {
+            response.put("Cotação inexistente", Boolean.TRUE);
+            return response;
+        }
 
         //excluir cotação
         cotacaoService.deleteByIdCotacao(Long.parseLong(idCotacao));
-
-        Map<String, Boolean> response = new HashMap<>();
 
         response.put("Deletado com sucesso!", Boolean.TRUE);
 
         return response;
     }
 
+    //Api para uso do Http PUT
+    @PutMapping("/api/update/{idCotacao}")
+    public Map<String, Boolean> replaceNews(@RequestBody Cotacao newCotacao, @PathVariable String idCotacao) {
+
+        //declaração para retorno REST
+        Map<String, Boolean> response = new HashMap<>();
+
+        Cotacao cot = cotacaoService.findByIdCotacao(idCotacao);
+
+        //teste para previnir erro HTTP 500
+        if (cot == null) {
+            response.put("Cotação inexistente", Boolean.TRUE);
+            return response;
+        }
+
+        cot.setDataCotacao(newCotacao.getDataCotacao());
+        cot.setFornecedor(newCotacao.getFornecedor());
+        cot.setValidadeCotacao(newCotacao.getValidadeCotacao());
+        cot.setValor(newCotacao.getValor());
+
+        cotacaoService.save(cot);
+
+        response.put("Cotação alterada com sucesso!", Boolean.TRUE);
+
+        return response;
+
+    }
 }

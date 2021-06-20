@@ -22,7 +22,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -53,11 +52,6 @@ public class CotacaoController {
         //pegar a lista de produtos
         List<Produto> prodLst = buscaProdSvc.buscaProdSvc();
 
-        for (Produto prd : prodLst) {
-            System.out.println("Produto nome: " + prd.getNome());
-            System.out.println("Produto cotação: " + prd.getImagem());
-        }
-
         model.addAttribute("prodLst", prodLst);
 
         return "cotacao";
@@ -72,11 +66,6 @@ public class CotacaoController {
 
         DateTimeFormatter DATEFORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate lDate = LocalDate.parse(dataCotacao, DATEFORMATTER);
-
-        System.out.println("produto: " + produto);
-        System.out.println("valor: " + valor);
-        System.out.println("validade cotação: " + validadeCotacao);
-        System.out.println("data cotação: " + dataCotacao);
 
         Cotacao cotacao = new Cotacao(produto, fornecedor, lDate, Integer.parseInt(validadeCotacao), new BigDecimal(valor.toString()));
 
@@ -154,7 +143,7 @@ public class CotacaoController {
 
         Cotacao cotacao = new Cotacao(Long.parseLong(idCotacao), produto, fornecedor, validCot, Integer.parseInt(validadeCotacao), new BigDecimal(valor));
 
-        Cotacao newCotacao = cotacaoService.findById(cotacao.getIdCotacao());
+        Cotacao newCotacao = cotacaoService.findByIdCotacao(idCotacao);
 
         if (newCotacao != null) {
             newCotacao.setProduto(cotacao.getProduto());
@@ -184,7 +173,7 @@ public class CotacaoController {
         System.out.println("id cotação: " + idCotacao);
 
         //buscar a cotação pelo Id dela
-        Cotacao cotacao = cotacaoService.findById(Long.parseLong(idCotacao));
+        Cotacao cotacao = cotacaoService.findByIdCotacao(idCotacao);
 
         //excluir cotação
         cotacaoService.deleteByIdCotacao(Long.parseLong(idCotacao));

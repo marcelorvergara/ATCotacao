@@ -8,6 +8,7 @@ package edu.infnet.cotacao.service;
 import edu.infnet.cotacao.model.Cotacao;
 import edu.infnet.cotacao.repository.CotacaoRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,13 +40,13 @@ public class CotacaoServiceImpl implements CotacaoService {
     }
 
     @Override
-    public Cotacao findById(Long idCotacao) {
-        return cotacaoRepository.findByIdCotacao(idCotacao);
+    public void deleteByIdCotacao(Long idCotacao) {
+        cotacaoRepository.deleteById(idCotacao);
     }
 
     @Override
-    public void deleteByIdCotacao(Long idCotacao) {
-        cotacaoRepository.deleteById(idCotacao);
+    public Optional<Cotacao> findById(Long id) {
+        return cotacaoRepository.findById(id);
     }
 
 }
