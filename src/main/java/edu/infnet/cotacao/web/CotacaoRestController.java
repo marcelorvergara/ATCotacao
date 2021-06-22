@@ -10,6 +10,8 @@ import edu.infnet.cotacao.model.Cotacao;
 import edu.infnet.cotacao.service.CotacaoService;
 import edu.infnet.cotacao.service.CsvExport;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +50,12 @@ public class CotacaoRestController {
         //buscar o nome do produto pelo seu id
         String nomePrd = buscaProdSvc.buscaNomeProd(prodId);
 
+        //customizar o nome do arquivo csv;
+        String timeStamp = new SimpleDateFormat("ddMMyyy_HH:mm:ss").format(Calendar.getInstance().getTime());
+
         //para abrir diretamente um arquivo no browser
         response.setHeader("Content-Type", "application/vnd.ms-excel");
-        response.setHeader("Content-Disposition", "attachment; filename=cotacoes.csv");
+        response.setHeader("Content-Disposition", "attachment; filename=" + nomePrd + "_" + timeStamp + ".csv");
 
         CsvExport.exportCotacoes(response.getWriter(), cotacaoList);
     }
